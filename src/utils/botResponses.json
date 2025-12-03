@@ -24,5 +24,8 @@
   "cooldownResponses": [
     "I need to recharge my tolerance battery; it's running dangerously low.",
     "I have provided you with as much as I could for now."
+  ],
+  "complimentResponses": [
+    "<STICKER:1397587176388296865>"
   ]
 }

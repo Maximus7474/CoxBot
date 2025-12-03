@@ -18,3 +18,7 @@ export const resourcePatterns = [
   /ox[ _]?fuel/i, // Matches "ox fuel", "oxfuel", "ox_fuel"
   /oxmysql/i, // Matches "oxmysql"
 ];
+
+export const compliementPatterns = [
+  /\b(good|nice|cool)\s+(bot|boy|boi|friend)\b/i,
+];
