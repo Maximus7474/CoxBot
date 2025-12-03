@@ -11,5 +11,6 @@ const guidelineResponses = Object.fromEntries(
 
 const resourceResponses = responsesData.resourceResponses.map(processResponse);
 const cooldownResponses = responsesData.cooldownResponses.map(processResponse);
+const complimentResponses = responsesData.complimentResponses.map(processResponse);
 
-export { guidelineResponses, resourceResponses, cooldownResponses };
+export { guidelineResponses, resourceResponses, cooldownResponses, complimentResponses };
