@@ -12,6 +12,7 @@ import { onMessageDeleteBulk } from './events/onPurge';
 import { onSlashCommand } from './events/onSlashCommand';
 import { onMemberRoleUpdate } from './events/onMemberRoleUpdate';
 import { onThreadUpdate } from './events/onThreadUpdate';
+import { onCompliment } from './events/onCompliment';
 
 export const Bot = new Client({
   intents: [
@@ -47,6 +48,7 @@ Bot.on(Events.GuildAuditLogEntryCreate, async (auditLogEntry, guild) => {
 Bot.on(Events.GuildMemberAdd, async (member) => await onMemberJoin(member));
 Bot.on(Events.MessageDelete, async (message) => await onMessageDelete(message));
 Bot.on(Events.MessageCreate, async (message) => await onMessageCreate(message));
+Bot.on(Events.MessageCreate, async (message) => await onCompliment(message));
 Bot.on(Events.MessageBulkDelete, onMessageDeleteBulk);
 Bot.on(Events.InteractionCreate, async (interaction) => {
   await onInteraction(interaction);
