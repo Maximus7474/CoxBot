@@ -1,8 +1,9 @@
 import { GuildMember } from 'discord.js';
+import { eq } from 'drizzle-orm';
 import logger from '../utils/logger';
 import { Roles } from '../constants';
 import db, { formatDate } from '../utils/db';
-import { user } from '../utils/db/schema';
+import { persistentRoles, user } from '../utils/db/schema';
 
 export const onMemberJoin = async (member: GuildMember) => {
   logger.debug(`Member join event triggered for ${member.user.tag} (${member.id})`);
@@ -20,6 +21,25 @@ export const onMemberJoin = async (member: GuildMember) => {
           joinedAt: formatDate(member.joinedAt || new Date()),
         }
       });
+
+    const userRoles = await db
+      .select({
+        roleId: persistentRoles.roleId,
+      })
+      .from(persistentRoles)
+      .where(eq(persistentRoles.userId, member.user.id));
+
+    if (userRoles.length > 0) {
+      const roleIds = userRoles.map(r => r.roleId);
+      
+      const validRoleIds = roleIds.filter(id => member.guild.roles.cache.has(id));
+      
+      if (validRoleIds.length > 0) {
+        await member.roles.add(validRoleIds);
+        logger.info(`Restored ${validRoleIds.length} roles for ${member.user.tag}`);
+      }
+    }
+
     logger.debug(`Created/Updated initial user record for ${member.user.tag}`);
   } catch (error) {
     logger.error(
