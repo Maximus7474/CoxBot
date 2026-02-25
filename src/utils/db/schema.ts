@@ -1,4 +1,4 @@
-import { mysqlTable, mysqlSchema, AnyMySqlColumn, index, int, text, varchar, timestamp, foreignKey, datetime } from "drizzle-orm/mysql-core"
+import { mysqlTable, mysqlSchema, AnyMySqlColumn, index, int, text, varchar, timestamp, foreignKey, datetime, primaryKey } from "drizzle-orm/mysql-core"
 import { sql } from "drizzle-orm"
 
 export const ban = mysqlTable("ban", {
@@ -28,6 +28,18 @@ export const warn = mysqlTable("warn", {
 },
 (table) => [
 	index("Warn_targetId_idx").on(table.targetId),
+]);
+
+export const persistentRoles = mysqlTable("persistent_roles", {
+    userId: varchar({ length: 255 })
+        .notNull()
+        .references(() => user.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    roleId: varchar({ length: 255 }).notNull(),
+    assignedAt: timestamp({ mode: 'string' }).default('current_timestamp()').notNull(),
+},
+(table) => [
+    primaryKey({ columns: [table.userId, table.roleId] }),
+    index("PersistentRoles_userId_idx").on(table.userId),
 ]);
 
 export const prismaMigrations = mysqlTable("_prisma_migrations", {
