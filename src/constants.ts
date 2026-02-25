@@ -45,4 +45,8 @@ export const Channels: Record<string, string> = {
   Support: '1367122035154751539',
 };
 
+export const PersisantRoles: Record<string, string> = {
+  ReleaseBan: 'some_id',
+};
+
 export const SolvedTag = '1368624103552057495';
