@@ -1,8 +1,8 @@
 import { DiscordAPIError, type Guild } from 'discord.js';
 import { PersisantRoles } from '../constants';
 import logger from '../utils/logger';
-import db from '../utils/db';
-import { persistentRoles } from '../utils/db/schema';
+import db, { formatDate } from '../utils/db';
+import { persistentRoles, user } from '../utils/db/schema';
 import { and, eq } from 'drizzle-orm';
 
 export async function persistantRoleHandler(guild: Guild, userid: string, roleKey: keyof typeof PersisantRoles, action: "add" | "remove") {
@@ -12,6 +12,17 @@ export async function persistantRoleHandler(guild: Guild, userid: string, roleKe
     }
 
     try {
+        await db.insert(user)
+            .values({
+                id: userid,
+                warns: 0,
+                timeouts: 0,
+                joinedAt: formatDate(new Date()), 
+            })
+            .onDuplicateKeyUpdate({ 
+                set: { id: userid }
+            });
+
         if (action === "add") {
             await db.insert(persistentRoles)
                 .values({ userId: userid, roleId: roleId })
