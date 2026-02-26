@@ -43,7 +43,7 @@ const PersistantRole: Command = {
       return;
     }
 
-    const roleOption = interaction.options.getString('role');
+    const roleOption = interaction.options.getString('role') as keyof typeof PersisantRoles;
     const role = PersisantRoles[roleOption as keyof typeof PersisantRoles];
 
     if (!role) {
@@ -54,7 +54,7 @@ const PersistantRole: Command = {
     const addRole = interaction.options.getBoolean('add');
 
     try {
-      await persistantRoleHandler(interaction.guild, member.id, role, addRole ? 'add' : 'remove');
+      await persistantRoleHandler(interaction.guild, member.id, roleOption, addRole ? 'add' : 'remove');
       await interaction.reply({ content: `${member.user.tag} has been ${addRole ? 'added' : 'removed'} the role ${role}` });
     } catch (error) {
       logger.error(error);
