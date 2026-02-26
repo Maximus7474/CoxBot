@@ -6,7 +6,7 @@ export const ban = mysqlTable("ban", {
 	reason: text().notNull(),
 	issuerId: varchar({ length: 255 }).notNull(),
 	targetId: varchar({ length: 255 }).notNull(),
-	issuedAt: timestamp({ mode: 'string' }).default('current_timestamp()').notNull(),
+	issuedAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 },
 (table) => [
 	index("Ban_targetId_idx").on(table.targetId),
@@ -16,7 +16,7 @@ export const user = mysqlTable("user", {
 	id: varchar({ length: 255 }).notNull(),
 	warns: int().default(0).notNull(),
 	timeouts: int().default(0).notNull(),
-	joinedAt: timestamp({ mode: 'string' }).default('current_timestamp()').notNull(),
+	joinedAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 });
 
 export const warn = mysqlTable("warn", {
@@ -24,7 +24,7 @@ export const warn = mysqlTable("warn", {
 	reason: text().notNull(),
 	issuerId: varchar({ length: 255 }).notNull(),
 	targetId: varchar({ length: 255 }).notNull().references(() => user.id, { onDelete: "restrict", onUpdate: "cascade" } ),
-	issuedAt: timestamp({ mode: 'string' }).default('current_timestamp()').notNull(),
+	issuedAt: timestamp({ mode: 'string' }).defaultNow().notNull(),
 },
 (table) => [
 	index("Warn_targetId_idx").on(table.targetId),
